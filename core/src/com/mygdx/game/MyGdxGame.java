@@ -6,13 +6,9 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class MyGdxGame extends ApplicationAdapter{
 	SpriteBatch batch;
@@ -29,6 +25,8 @@ public class MyGdxGame extends ApplicationAdapter{
 	MovementSystem movementSystem;
 	RenderSystem renderSystem;
 	RemoveSystem removeSystem;
+	
+	Player player;
 	
 	float spawnTimer;
 	float randSpawn;
@@ -52,6 +50,8 @@ public class MyGdxGame extends ApplicationAdapter{
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(camera.combined);
 		background = new Texture("snow-background.png");
+		
+		player = new Player();
         
         spawnTimer = 0;
         randSpawn = 1;
@@ -62,7 +62,10 @@ public class MyGdxGame extends ApplicationAdapter{
 		
 		batch.begin();
 		batch.draw(background, 0, 0);
+		player.render(batch);
 		batch.end();
+		
+		player.update(Gdx.graphics.getDeltaTime(), appWidth, screenWidth);
 
 		updateSpawn();
 		
@@ -70,12 +73,12 @@ public class MyGdxGame extends ApplicationAdapter{
 		
 		// Also You can get touch input according to your Screen.
 		
-		if (Gdx.input.isTouched()) {
-		 System.out.println(" X " + Gdx.input.getX()
-				* (appWidth / screenWidth));
-		 System.out.println(" Y " + Gdx.input.getY()
-				* (appHeight / screenHeight));
-	   }
+//		if (Gdx.input.isTouched()) {
+//		 System.out.println(" X " + Gdx.input.getX()
+//				* (appWidth / screenWidth));
+//		 System.out.println(" Y " + Gdx.input.getY()
+//				* (appHeight / screenHeight));
+//	   }
 	}
 	
 	private void updateSpawn() {
@@ -104,6 +107,13 @@ public class MyGdxGame extends ApplicationAdapter{
 			spawnTimer = 0;
 		}
 	}
+	
+	@Override
+	public void resize(int width, int height) {
+		screenWidth = width;
+		screenHeight = height;
+        camera.update();
+    }
 	
 	@Override
 	public void dispose () {
