@@ -29,6 +29,7 @@ public class MyGdxGame extends ApplicationAdapter{
 	Player player;
 	
 	float spawnTimer;
+	float spawnBulletTimer;
 	float randSpawn;
 	
 	@Override
@@ -51,10 +52,11 @@ public class MyGdxGame extends ApplicationAdapter{
 		batch.setProjectionMatrix(camera.combined);
 		background = new Texture("snow-background.png");
 		
-		player = new Player();
+		player = new Player(appHeight);
         
         spawnTimer = 0;
         randSpawn = 1;
+        spawnBulletTimer = 0;
 	}
 
 	@Override
@@ -83,29 +85,58 @@ public class MyGdxGame extends ApplicationAdapter{
 	
 	private void updateSpawn() {
 		spawnTimer += Gdx.graphics.getDeltaTime();
+		spawnBulletTimer += Gdx.graphics.getDeltaTime();
 		
 		if(spawnTimer > randSpawn) {
 			Random rand = new Random();
-
-			int  n = rand.nextInt(400) + 1;
-			int  velRand = rand.nextInt(400) + 100;
+			
 			randSpawn = rand.nextFloat() * 2;
 			
-			VelocityComponent vel = new VelocityComponent();
-			vel.x = -velRand;
-			PositionComponent pos = new PositionComponent();
-			pos.y = n;
-			pos.x = 800;
-			RenderComponent ren = new RenderComponent();
-			ren.img = new Texture("santaandsnowman.png");
-			Entity entity = new Entity();
-			entity.add(pos);
-			entity.add(vel);
-			entity.add(ren);
-			
-			engine.addEntity(entity);
+			spawnSanta();
 			spawnTimer = 0;
 		}
+		
+		if(player.isPlayerShooting() && spawnBulletTimer > 0.1) {
+			spawnBullet();
+			spawnBulletTimer = 0;
+		}
+	}
+	
+	private void spawnBullet() {
+		VelocityComponent vel = new VelocityComponent();
+		vel.y = -300;
+		PositionComponent pos = new PositionComponent();
+		pos.y = player.y;
+		pos.x = player.x + player.img.getWidth()/2;
+		RenderComponent ren = new RenderComponent();
+		ren.img = new Texture("snowball.png");
+		Entity entity = new Entity();
+		entity.add(pos);
+		entity.add(vel);
+		entity.add(ren);
+		
+		engine.addEntity(entity);
+	}
+	
+	private void spawnSanta() {
+		Random rand = new Random();
+
+		int  n = rand.nextInt(400) + 1;
+		int  velRand = rand.nextInt(400) + 100;
+		
+		VelocityComponent vel = new VelocityComponent();
+		vel.x = -velRand;
+		PositionComponent pos = new PositionComponent();
+		pos.y = n;
+		pos.x = 800;
+		RenderComponent ren = new RenderComponent();
+		ren.img = new Texture("santaandsnowman.png");
+		Entity entity = new Entity();
+		entity.add(pos);
+		entity.add(vel);
+		entity.add(ren);
+		
+		engine.addEntity(entity);
 	}
 	
 	@Override

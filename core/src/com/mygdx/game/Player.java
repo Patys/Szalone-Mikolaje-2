@@ -9,19 +9,37 @@ public class Player {
 	public float x;
 	public float y;
 	
+	public float velocity;
+	
 	Texture img;
 	
-	Player() {
+	Player(float appHeight) {
 		this.img = new Texture("platform-snow.png");
+		this.velocity = 400;
+		this.y = appHeight - this.img.getHeight();
 	}
 	
 	public void update(float deltaTime, float appWidth, float screenWidth) {
 		float touch_x = Gdx.input.getX() * (appWidth / screenWidth);
-		if(Gdx.input.isKeyPressed(Keys.LEFT) || (Gdx.input.isTouched() && touch_x < (appWidth/2))) {
-			this.x += -100 * deltaTime;
+		
+		if(this.x > 0) {
+			if(Gdx.input.isKeyPressed(Keys.LEFT) || (Gdx.input.isTouched() && touch_x < (appWidth/2))) {
+				this.x += -this.velocity * deltaTime;
+			}
 		}
-		if(Gdx.input.isKeyPressed(Keys.RIGHT) || (Gdx.input.isTouched() && touch_x > (appWidth/2))) {
-			this.x += 100 * deltaTime;
+		if(this.x < appWidth - img.getWidth()) {
+			if(Gdx.input.isKeyPressed(Keys.RIGHT) || (Gdx.input.isTouched() && touch_x > (appWidth/2))) {
+				this.x += this.velocity * deltaTime;
+			}
+		}
+	}
+	
+	public Boolean isPlayerShooting() {
+		if(Gdx.input.isKeyPressed(Keys.SPACE)) {
+			return true;
+		}
+		else {
+			return false;
 		}
 	}
 	

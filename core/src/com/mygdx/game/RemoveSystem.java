@@ -29,6 +29,11 @@ public class RemoveSystem extends EntitySystem {
             PositionComponent position = pm.get(entity);
             if(position.x < -100) {
             	this.engine.removeEntity(entity);
+            	return;
+            }
+            if(position.y < -100) {
+            	this.engine.removeEntity(entity);
+            	return;
             }
         }
     }
