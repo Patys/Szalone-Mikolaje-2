@@ -8,11 +8,15 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
 public class MyGdxGame extends ApplicationAdapter{
 	SpriteBatch batch;
 	Texture background;
+	BitmapFont font;
 
 	final float appWidth = 800; 
 	final float appHeight = 600;
@@ -27,6 +31,8 @@ public class MyGdxGame extends ApplicationAdapter{
 	RemoveSystem removeSystem;
 	
 	Player player;
+	String text_score;
+	int score;
 	
 	float spawnTimer;
 	float spawnBulletTimer;
@@ -57,6 +63,14 @@ public class MyGdxGame extends ApplicationAdapter{
         spawnTimer = 0;
         randSpawn = 1;
         spawnBulletTimer = 0;
+        score = 0;
+        text_score = "" + score;
+        
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Raleway-Bold.otf"));
+        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+        parameter.size = 32;
+        font = generator.generateFont(parameter); // font size 12 pixels
+        generator.dispose(); // don't forget to dispose to avoid memory leaks!
 	}
 
 	@Override
@@ -65,6 +79,7 @@ public class MyGdxGame extends ApplicationAdapter{
 		batch.begin();
 		batch.draw(background, 0, 0);
 		player.render(batch);
+		font.draw(batch, text_score, (appWidth/2)-(text_score.length()/2*32), appHeight/2-16);
 		batch.end();
 		
 		player.update(Gdx.graphics.getDeltaTime(), appWidth, screenWidth);
