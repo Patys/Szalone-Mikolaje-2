@@ -29,6 +29,7 @@ public class MyGdxGame extends ApplicationAdapter{
 	MovementSystem movementSystem;
 	RenderSystem renderSystem;
 	RemoveSystem removeSystem;
+	CollisionSystem collisionSystem;
 	
 	Player player;
 	String text_score;
@@ -50,9 +51,11 @@ public class MyGdxGame extends ApplicationAdapter{
 		movementSystem = new MovementSystem();
 		renderSystem = new RenderSystem(camera);
 		removeSystem = new RemoveSystem(engine);
+		collisionSystem = new CollisionSystem();
 		engine.addSystem(movementSystem);
 		engine.addSystem(renderSystem);
 		engine.addSystem(removeSystem);
+		engine.addSystem(collisionSystem);
 		
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(camera.combined);
@@ -79,6 +82,7 @@ public class MyGdxGame extends ApplicationAdapter{
 		batch.begin();
 		batch.draw(background, 0, 0);
 		player.render(batch);
+        text_score = "" + score;
 		font.draw(batch, text_score, (appWidth/2)-(text_score.length()/2*32), appHeight/2-16);
 		batch.end();
 		
@@ -129,6 +133,8 @@ public class MyGdxGame extends ApplicationAdapter{
 		entity.add(pos);
 		entity.add(vel);
 		entity.add(ren);
+		
+		this.score -= 1;
 		
 		engine.addEntity(entity);
 	}

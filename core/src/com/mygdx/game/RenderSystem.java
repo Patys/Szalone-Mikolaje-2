@@ -25,6 +25,7 @@ public class RenderSystem extends EntitySystem {
 		this.camera = camera;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void addedToEngine (Engine engine) {
 		entities = engine.getEntitiesFor(Family.all(PositionComponent.class, RenderComponent.class).get());
