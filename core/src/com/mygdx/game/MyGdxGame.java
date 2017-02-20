@@ -33,7 +33,6 @@ public class MyGdxGame extends ApplicationAdapter{
 	
 	Player player;
 	String text_score;
-	int score;
 	
 	float spawnTimer;
 	float spawnBulletTimer;
@@ -48,10 +47,10 @@ public class MyGdxGame extends ApplicationAdapter{
 		camera.setToOrtho(false, appWidth, appHeight);
 		
 		engine = new Engine();
+		collisionSystem = new CollisionSystem();
 		movementSystem = new MovementSystem();
 		renderSystem = new RenderSystem(camera);
 		removeSystem = new RemoveSystem(engine);
-		collisionSystem = new CollisionSystem();
 		engine.addSystem(movementSystem);
 		engine.addSystem(renderSystem);
 		engine.addSystem(removeSystem);
@@ -66,8 +65,7 @@ public class MyGdxGame extends ApplicationAdapter{
         spawnTimer = 0;
         randSpawn = 1;
         spawnBulletTimer = 0;
-        score = 0;
-        text_score = "" + score;
+        text_score = "" + MetaGame.score;
         
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Raleway-Bold.otf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -82,7 +80,7 @@ public class MyGdxGame extends ApplicationAdapter{
 		batch.begin();
 		batch.draw(background, 0, 0);
 		player.render(batch);
-        text_score = "" + score;
+        text_score = "" + MetaGame.score;
 		font.draw(batch, text_score, (appWidth/2)-(text_score.length()/2*32), appHeight/2-16);
 		batch.end();
 		
@@ -115,7 +113,7 @@ public class MyGdxGame extends ApplicationAdapter{
 			spawnTimer = 0;
 		}
 		
-		if(player.isPlayerShooting() && spawnBulletTimer > 0.1) {
+		if(player.isPlayerShooting() && spawnBulletTimer > 0.2) {
 			spawnBullet();
 			spawnBulletTimer = 0;
 		}
@@ -129,12 +127,15 @@ public class MyGdxGame extends ApplicationAdapter{
 		pos.x = player.x + player.img.getWidth()/2;
 		RenderComponent ren = new RenderComponent();
 		ren.img = new Texture("snowball.png");
+		TypeComponent type = new TypeComponent();
+		type.type = "bullet";
 		Entity entity = new Entity();
 		entity.add(pos);
 		entity.add(vel);
 		entity.add(ren);
+		entity.add(type);
 		
-		this.score -= 1;
+		MetaGame.score -= 1;
 		
 		engine.addEntity(entity);
 	}
@@ -152,10 +153,13 @@ public class MyGdxGame extends ApplicationAdapter{
 		pos.x = 800;
 		RenderComponent ren = new RenderComponent();
 		ren.img = new Texture("santaandsnowman.png");
+		TypeComponent type = new TypeComponent();
+		type.type = "santa";
 		Entity entity = new Entity();
 		entity.add(pos);
 		entity.add(vel);
 		entity.add(ren);
+		entity.add(type);
 		
 		engine.addEntity(entity);
 	}
