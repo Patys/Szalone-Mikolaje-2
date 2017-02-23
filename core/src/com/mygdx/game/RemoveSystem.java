@@ -29,12 +29,32 @@ public class RemoveSystem extends EntitySystem {
             PositionComponent position = pm.get(entity);
             if(position.x < -100) {
             	this.engine.removeEntity(entity);
+            	updateLives();
             	return;
             }
-            if(position.y < -100) {
+            if(position.y < -32) {
             	this.engine.removeEntity(entity);
+            	updateStreakAndRecord();
             	return;
             }
         }
+    }
+    
+    private void updateLives() {
+		MetaGame.lives -= 1;
+		if(MetaGame.lives <= 0){
+			MetaGame.bestScore = MetaGame.score;
+			MetaGame.score = 0;
+			MetaGame.streak = 0;
+			MetaGame.lives = 3;
+			this.engine.removeAllEntities();
+		}
+		
+	}
+
+	public void updateStreakAndRecord() {
+    	if(MetaGame.streak > MetaGame.record)
+    		MetaGame.record = MetaGame.streak;
+    	MetaGame.streak = 0;
     }
 }

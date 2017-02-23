@@ -44,6 +44,7 @@ public class CollisionSystem  extends EntitySystem {
         	            	engine.removeEntity(col_entity);
         	            	engine.removeEntity(entity);
         	            	MetaGame.score += 2;
+        	            	MetaGame.streak += 1;
         	                break;
         	            }	
     	            }

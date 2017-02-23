@@ -33,6 +33,10 @@ public class MyGdxGame extends ApplicationAdapter{
 	
 	Player player;
 	String text_score;
+	String text_streak;
+	String text_record;
+	String text_best_score;
+	String text_lives;
 	
 	float spawnTimer;
 	float spawnBulletTimer;
@@ -66,6 +70,10 @@ public class MyGdxGame extends ApplicationAdapter{
         randSpawn = 1;
         spawnBulletTimer = 0;
         text_score = "" + MetaGame.score;
+        text_streak = "" + MetaGame.streak;
+        text_record = "" + MetaGame.record;
+        text_best_score = "" + MetaGame.bestScore;
+        text_lives = "" + MetaGame.lives;
         
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Raleway-Bold.otf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -80,8 +88,19 @@ public class MyGdxGame extends ApplicationAdapter{
 		batch.begin();
 		batch.draw(background, 0, 0);
 		player.render(batch);
-        text_score = "" + MetaGame.score;
-		font.draw(batch, text_score, (appWidth/2)-(text_score.length()/2*32), appHeight/2-16);
+
+        text_best_score = "Best score: " + MetaGame.bestScore;
+		font.draw(batch, text_best_score, (appWidth)-(text_best_score.length()*32)/2, appHeight-6);
+
+        text_lives = "Lives: " + MetaGame.lives;
+		font.draw(batch, text_lives, 0, appHeight-6);
+		
+        text_score = "Score: " + MetaGame.score;
+		font.draw(batch, text_score, (appWidth/2)-(text_score.length()*32/2)/2, appHeight/2-6);
+        text_streak = "Streak: " + MetaGame.streak;
+		font.draw(batch, text_streak, (appWidth/2)-(text_streak.length()*32/2)/2, appHeight/2-37);
+        text_record = "Record: " + MetaGame.record;
+		font.draw(batch, text_record, (appWidth/2)-(text_record.length()*32/2)/2, appHeight/2-68);
 		batch.end();
 		
 		player.update(Gdx.graphics.getDeltaTime(), appWidth, screenWidth);
